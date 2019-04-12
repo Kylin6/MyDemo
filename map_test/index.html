@@ -3,10 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        html,body,#container{
+            height:100%;
+        }
+        .info{
+            width:26rem;
+        }
+    </style>
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=03096dc39777ec4242ccc98396daa9b5">
     </script>
@@ -93,7 +100,7 @@
         });
         //解析定位结果
         function onComplete(data) {
-            console.log("定位成功： " + data.position)
+            // console.log("定位成功： " + data.position)
             document.getElementById('map-center').innerHTML = data.position;
             addMarker(data.position);
             // document.getElementById('status').innerHTML = '定位成功'
@@ -109,6 +116,7 @@
         //解析定位错误信息
         function onError(data) {
             // console.log("定位失败")
+            document.getElementById('map-center').innerHTML = '定位失败';
             // document.getElementById('status').innerHTML = '定位失败'
             // document.getElementById('result').innerHTML = '失败原因排查信息:' + data.message;
         }
