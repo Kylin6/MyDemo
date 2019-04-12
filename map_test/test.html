@@ -38,7 +38,7 @@
 </div>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=03096dc39777ec4242ccc98396daa9b5"></script>
 <!-- UI组件库 1.0 -->
-<script src="https://webapi.amap.com/ui/1.0/main.js"></script>
+<!-- <script src="https://webapi.amap.com/ui/1.0/main.js"></script> -->
 <script type="text/javascript">
     var map = new AMap.Map('container', {
         resizeEnable: true
@@ -80,12 +80,12 @@
         document.getElementById('status').innerHTML='定位失败'
         document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
     }
-    AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
-            map.addControl(new BasicControl.Zoom({
-                position: 'lb',
-                showZoomNum: true
-            }));
-        });
+    // AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
+    //         map.addControl(new BasicControl.Zoom({
+    //             position: 'lb',
+    //             showZoomNum: true
+    //         }));
+    //     });
 
         // 添加 marker
         var markers = [];
