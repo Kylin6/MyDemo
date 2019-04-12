@@ -1,143 +1,70 @@
 <!doctype html>
-<html>
-<head>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>test</title>
-      <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
-    <style>
-        html,body,#container{
-            height:100%;
-        }
-        .info{
-            width:26rem;
-        }
-        #container {
-            position: relative;
-        }
-
-        .zhongxin {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -100%);
-            margin: auto;
-            z-index: 1;
-        }
+    <style type="text/css">
+      body,html,#container{
+        height: 100%;
+        margin: 0px;
+        font:12px Arial;
+      }
+      .taiwan{
+      	border: solid 1px red;
+      	color: red;
+      	float: left;
+      	width: 50px;
+      	background-color: rgba(255,0,0,0.1)
+      }
     </style>
-<body>
-<div id='container'>
-    <div class="zhongxin">
-        <img src="https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png" alt="">
-    </div>
-</div>
-<div class="info">
-    <h4 id='status'></h4><hr>
-    <p id='result'></p>
-</div>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=03096dc39777ec4242ccc98396daa9b5"></script>
-<!-- UI组件库 1.0 -->
-<!-- <script src="https://webapi.amap.com/ui/1.0/main.js"></script> -->
-<script type="text/javascript">
-    var map = new AMap.Map('container', {
-        resizeEnable: true
-    });
-    AMap.plugin('AMap.Geolocation', function() {
-        var geolocation = new AMap.Geolocation({
-            enableHighAccuracy: true,//是否使用高精度定位，默认:true
-            timeout: 10000,          //超过10秒后停止定位，默认：5s
-            buttonPosition:'RB',    //定位按钮的停靠位置
-            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-            zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
+    <title>Marker example</title>
+  </head>
+  <body>
+   <div id="container" tabindex="0"></div>
+   <script src="https://webapi.amap.com/js/marker.js"></script>
+   <script src="https://webapi.amap.com/maps?v=1.4.14&key=您申请的key值"></script>
+   <script type="text/javascript">
 
-        });
-        map.addControl(geolocation);
-        geolocation.getCurrentPosition(function(status,result){
-            if(status=='complete'){
-                onComplete(result)
-            }else{
-                onError(result)
+        var map = new AMap.Map('container',{resizeEnable: true,zoom:4});
+        var markers = []; //province见Demo引用的JS文件
+        for (var i = 0; i < provinces.length; i += 1) {
+    			var marker;
+    			if (provinces[i].type === 0) {
+    				var icon = new AMap.Icon({
+    					image: 'https://vdata.amap.com/icons/b18/1/2.png',
+    					size: new AMap.Size(24, 24)
+    				});
+    				marker = new AMap.Marker({
+    					icon: icon,
+    					position: provinces[i].center.split(','),
+    					offset: new AMap.Pixel(-12,-12),
+    					zIndex: 101,
+    					title: provinces[i].name,
+    					map: map
+    				});
+    			} else {
+    				marker = new AMap.Marker({
+    					position: provinces[i].center.split(','),
+    					title: provinces[i].name,
+    					map: map
+    				});
+            if (provinces[i].type === 2) {
+      				var content= "<div class = 'taiwan'>宝岛台湾</div>";
+      				baodao = new AMap.Marker({
+      					content: content,
+      					position: provinces[i].center.split(','),
+      					title: provinces[i].name,
+      					offset: new AMap.Pixel(0,0),
+      					map: map
+      				});
             }
-        });
-    });
-    //解析定位结果
-    function onComplete(data) {
-        document.getElementById('status').innerHTML='定位成功'
-        var str = [];
-        str.push('定位结果：' + data.position);
-        str.push('定位类别：' + data.location_type);
-        if(data.accuracy){
-             str.push('精度：' + data.accuracy + ' 米');
-        }//如为IP精确定位结果则没有精度信息
-        str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
-        document.getElementById('result').innerHTML = str.join('<br>');
-        
-        addMarker(data.position);
-    }
-    //解析定位错误信息
-    function onError(data) {
-        document.getElementById('status').innerHTML='定位失败'
-        document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
-    }
-    // AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
-    //         map.addControl(new BasicControl.Zoom({
-    //             position: 'lb',
-    //             showZoomNum: true
-    //         }));
-    //     });
-
-        // 添加 marker
-        var markers = [];
-
-        function addMarker(position) {
-            if (markers.length > 0) {
-                clearMarker(markers);
-                markers = [];
-            }
-
-            for (let i = 0; i < 5; i++) {
-                var marker;
-                var posX, posY;
-                var sum = Math.round(Math.random()) ? '0.000' : '-0.000';
-                posX = Number(sum + Math.floor(Math.random() * 1000)) + position.Q;
-                posY = Number(sum + Math.floor(Math.random() * 1000)) + position.P;
-                marker = new AMap.Marker({
-                    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png",
-                    position: [posX, posY],
-                    offset: new AMap.Pixel(-10, -32), //偏移量
-                    map: map
-                });
-                markers.push(marker);
-            }
-
-            console.log(markers)
-        }
-        // 清除 marker
-        function clearMarker(marker) {
-            for (let i = 0; i < marker.length; i++) {
-                if (marker[i]) {
-                    marker[i].setMap(null);
-                    marker[i] = null;
-                }
-            }
-
-        }
-        // 事件绑定
-        function moveOn() {
-            // console.log("绑定事件!");
-            map.on('movestart');
-            map.on('mapmove');
-            map.on('moveend', function () {
-                var zoom = map.getZoom(); //获取当前地图级别
-                var center = map.getCenter(); //获取当前地图级别
-                // document.querySelector("#map-center").innerText = center.toString();
-                addMarker(center)
-
-            });
-        }
-        moveOn();
-
-</script>
-</body>
+    			}
+    			markers.push(marker);
+    		}
+     alert(markers)
+			  map.setFitView();
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
+  </body>
 </html>
