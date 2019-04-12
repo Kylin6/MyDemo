@@ -60,7 +60,7 @@
                 markers = [];
             }
 
-            for (let i = 0; i < 5; i++) {
+            for (var i = 0; i < 5; i++) {
                 var marker;
                 var posX, posY;
                 var sum = Math.round(Math.random()) ? '0.000' : '-0.000';
@@ -71,7 +71,6 @@
                     position: [posX, posY],
                     offset: new AMap.Pixel(-10, -32), //偏移量
                 });
-                map.add(marker);
                 markers.push(marker);
             }
 
@@ -79,7 +78,7 @@
         }
         // 清除 marker
         function clearMarker(marker) {
-            for (let i = 0; i < marker.length; i++) {
+            for (var i = 0; i < marker.length; i++) {
                 if (marker[i]) {
                     marker[i].setMap(null);
                     marker[i] = null;
