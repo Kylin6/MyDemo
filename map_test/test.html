@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>浏览器精确定位</title>
+    <title>test</title>
       <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
     <style>
         html,body,#container{
@@ -13,15 +13,32 @@
         .info{
             width:26rem;
         }
+        #container {
+            position: relative;
+        }
+
+        .zhongxin {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            margin: auto;
+            z-index: 1;
+        }
     </style>
 <body>
-<div id='container'></div>
+<div id='container'>
+    <div class="zhongxin">
+        <img src="https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png" alt="">
+    </div>
+</div>
 <div class="info">
     <h4 id='status'></h4><hr>
-    <p id='result'></p><hr>
-    <p >由于众多浏览器已不再支持非安全域的定位请求，为保位成功率和精度，请升级您的站点到HTTPS。</p>
+    <p id='result'></p>
 </div>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=03096dc39777ec4242ccc98396daa9b5"></script>
+<!-- UI组件库 1.0 -->
+<script src="https://webapi.amap.com/ui/1.0/main.js"></script>
 <script type="text/javascript">
     var map = new AMap.Map('container', {
         resizeEnable: true
@@ -55,12 +72,72 @@
         }//如为IP精确定位结果则没有精度信息
         str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
         document.getElementById('result').innerHTML = str.join('<br>');
+        
+        addMarker(data.position);
     }
     //解析定位错误信息
     function onError(data) {
         document.getElementById('status').innerHTML='定位失败'
         document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
     }
+    AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
+            map.addControl(new BasicControl.Zoom({
+                position: 'lb',
+                showZoomNum: true
+            }));
+        });
+
+        // 添加 marker
+        var markers = [];
+
+        function addMarker(position) {
+            if (markers.length > 0) {
+                clearMarker(markers);
+                markers = [];
+            }
+
+            for (let i = 0; i < 5; i++) {
+                var marker;
+                var posX, posY;
+                var sum = Math.round(Math.random()) ? '0.000' : '-0.000';
+                posX = Number(sum + Math.floor(Math.random() * 1000)) + position.Q;
+                posY = Number(sum + Math.floor(Math.random() * 1000)) + position.P;
+                marker = new AMap.Marker({
+                    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png",
+                    position: [posX, posY],
+                    offset: new AMap.Pixel(-10, -32), //偏移量
+                    map: map
+                });
+                markers.push(marker);
+            }
+
+            console.log(markers)
+        }
+        // 清除 marker
+        function clearMarker(marker) {
+            for (let i = 0; i < marker.length; i++) {
+                if (marker[i]) {
+                    marker[i].setMap(null);
+                    marker[i] = null;
+                }
+            }
+
+        }
+        // 事件绑定
+        function moveOn() {
+            // console.log("绑定事件!");
+            map.on('movestart');
+            map.on('mapmove');
+            map.on('moveend', function () {
+                var zoom = map.getZoom(); //获取当前地图级别
+                var center = map.getCenter(); //获取当前地图级别
+                // document.querySelector("#map-center").innerText = center.toString();
+                addMarker(center)
+
+            });
+        }
+        moveOn();
+
 </script>
 </body>
 </html>
