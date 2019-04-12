@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <link href="https://cdn.bootcss.com/font-awesome/5.8.1/css/all.min.css" rel="stylesheet">
     <style>
         html,
         body,
@@ -21,6 +22,49 @@
             transform: translate(-50%, -100%);
             margin: auto;
             z-index: 1;
+        }
+        .icon{
+            position: fixed;
+            left: 10px;
+            bottom: 70px;
+        }
+        .iconitem{
+            position: relative;
+            width: 35px;
+            height: 35px;
+            border-radius: 100%;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+        .me{
+            position: fixed;
+            right: 0;
+            bottom: 50px;
+            width: 70px;
+            height: 50px;
+            border-radius: 45% 0 0 45%;
+            background: #fff; 
+        }
+        .me_box{
+            position: relative;
+            /* border: 1px solid #000; */
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+            margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ccc;
+        }
+        .amap-geolocation-con{
+            left: 10px;
+        }
+        .amap-geolocation-con .amap-geo{
+            border-radius: 100%;
         }
     </style>
     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=03096dc39777ec4242ccc98396daa9b5">
@@ -37,6 +81,19 @@
     <div class="info">
         <p>当前中心点：<span id="map-center">118.686901,30.955752</span></p>
     </div>
+    <div class="icon">
+        <div class="iconitem">
+                <i class="fa fa-camera-retro fa-commenting"></i> 
+        </div>
+        <div class="iconitem">
+                <i class="fa fa-camera-retro fa-cog"></i> 
+        </div>
+    </div>
+    <div class="me">
+        <div class="me_box">
+                <i class="fa fa-camera-retro fa-user"></i> 
+        </div>
+    </div>
 
     <script src="./marker.js"></script>
     <script type="text/javascript">
@@ -44,12 +101,12 @@
             resizeEnable: true,
             zoom: 17,
         });
-        AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
-            map.addControl(new BasicControl.Zoom({
-                position: 'lb',
-                showZoomNum: true
-            }));
-        });
+        // AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
+        //     map.addControl(new BasicControl.Zoom({
+        //         position: 'lb',
+        //         showZoomNum: true
+        //     }));
+        // });
 
         // 添加 marker
         var markers = [];
