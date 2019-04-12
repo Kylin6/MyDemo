@@ -26,7 +26,7 @@
     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=03096dc39777ec4242ccc98396daa9b5">
     </script>
     <!-- UI组件库 1.0 -->
-    <!-- <script src="https://webapi.amap.com/ui/1.0/main.js"></script> -->
+    <script src="https://webapi.amap.com/ui/1.0/main.js"></script>
 </head>
 
 <body>
@@ -44,12 +44,12 @@
             resizeEnable: true,
             zoom: 17,
         });
-        // AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
-        //     map.addControl(new BasicControl.Zoom({
-        //         position: 'lb',
-        //         showZoomNum: true
-        //     }));
-        // });
+        AMapUI.loadUI(['control/BasicControl'], function (BasicControl) {
+            map.addControl(new BasicControl.Zoom({
+                position: 'lb',
+                showZoomNum: true
+            }));
+        });
 
         // 添加 marker
         var markers = [];
@@ -70,8 +70,8 @@
                     icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png",
                     position: [posX, posY],
                     offset: new AMap.Pixel(-10, -32), //偏移量
-                    map: map
                 });
+                map.add(marker);
                 markers.push(marker);
             }
 
